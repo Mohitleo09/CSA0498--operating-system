@@ -45,4 +45,3 @@ int main()
 	printf("Average Waiting Time= %f", avg_wt);
 	printf("\nAverage Turnaround Time= %f", avg_tat);
 }
-Fo
