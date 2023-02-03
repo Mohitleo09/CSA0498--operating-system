@@ -1,31 +1,22 @@
+#include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <pthread.h>
-#include <semaphore.h>
-#include <unistd.h>
-int sum = 0; 
-sem_t mutex; 
+void *thread_function(void *arg)
+{
+    int *value = (int *)arg;  
+    printf("Hello SSE from thread %d\n", *value);  
 
-void *add(void *arg){
-    int *ptr = (int *) arg;
-    while(*ptr != -1){
-        sem_wait(&mutex);
-        sum += *ptr;
-        printf("value: %d sum %d\n", *ptr,sum );
-        sem_post(&mutex);
-        ptr++;
-    }
     return NULL;
 }
-int main(int argc, char *args[]){
-    int A[4] = {2,5,7, -1}; 
-    int B[4] = {4,2,3, -3};
-    pthread_t t_a, t_b;
-    sem_init(&mutex, 0, 1);
-    pthread_create(&t_a , NULL, add, A);
-    pthread_create(&t_b, NULL, add, B);
-    pthread_join(t_a, NULL);
-    pthread_join(t_b, NULL);
-    printf("Total: %d\n", sum);
+
+int main(int argc, char *argv[])
+{
+    pthread_t thread1, thread2; 
+    int value1 = 1, value2 = 2; 
+    pthread_create(&thread1, NULL, thread_function, &value1);
+    pthread_create(&thread2, NULL, thread_function, &value2);
+    pthread_join(thread1, NULL);
+    pthread_join(thread2, NULL);
+
     return 0;
 }
